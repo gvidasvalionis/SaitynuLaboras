@@ -11,4 +11,4 @@ class GrandPrix(Base):
     year = Column(Integer, nullable=False)
 
     # Relationships
-    strategies = relationship("Strategy", back_populates="grand_prix")
+    strategies = relationship("Strategy", back_populates="grand_prix", cascade="all, delete-orphan")

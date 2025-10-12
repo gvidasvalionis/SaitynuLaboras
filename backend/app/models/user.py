@@ -19,5 +19,5 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.now(timezone.utc), nullable=False)
 
     # relationships
-    strategies = relationship("Strategy", back_populates="author", foreign_keys="Strategy.author_id")
-    approved_strategies = relationship("Strategy", back_populates="approved_by", foreign_keys="Strategy.approved_by_id")
+    strategies = relationship("Strategy", back_populates="author", foreign_keys="Strategy.author_id", cascade="all, delete-orphan")
+    approved_strategies = relationship("Strategy", back_populates="approved_by", foreign_keys="Strategy.approved_by_id", cascade="all, delete-orphan")

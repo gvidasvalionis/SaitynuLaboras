@@ -11,5 +11,5 @@ class Team(Base):
     name = Column(String(100), nullable=False)
     
     # Relationships
-    drivers = relationship("Driver", back_populates="team")
-    strategies = relationship("Strategy", back_populates="team")
+    drivers = relationship("Driver", back_populates="team", cascade="all, delete-orphan")
+    strategies = relationship("Strategy", back_populates="team", cascade="all, delete-orphan")

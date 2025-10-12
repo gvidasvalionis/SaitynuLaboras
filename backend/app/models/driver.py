@@ -12,4 +12,4 @@ class Driver(Base):
 
     # Relationships
     team = relationship("Team", back_populates="drivers")
-    strategies = relationship("Strategy", back_populates="driver")
+    strategies = relationship("Strategy", back_populates="driver", cascade="all, delete-orphan")
