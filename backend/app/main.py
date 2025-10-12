@@ -6,6 +6,7 @@ app = FastAPI(
     title="Formula 1 Strategy Sharing API",
     description="API for sharing Formula 1 race strategies",
     version="1.0.0",
+    docs_url="/docs",
 )
 
 app.include_router(api_router, prefix="/api")

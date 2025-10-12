@@ -28,6 +28,23 @@ def create_driver(
 ) -> Any:
     """Create new driver."""
     driver = models.Driver(**driver_in.dict())
+
+    team_does_not_exist = not (
+        db.query(models.Team)
+        .filter(models.Team.id == driver_in.team_id)
+        .first()
+    )
+
+    if team_does_not_exist and driver_in.team_id is not None:
+        raise HTTPException(status_code=400, detail="Team does not exist.")
+    
+    if (
+        db.query(models.Driver)
+        .filter(models.Driver.team_id == driver_in.team_id)
+        .count() >= 2
+    ):
+        raise HTTPException(status_code=400, detail="Team already has 2 drivers.")
+
     db.add(driver)
     db.commit()
     db.refresh(driver)
@@ -60,8 +77,26 @@ def update_driver(
         raise HTTPException(status_code=404, detail="Driver not found")
     
     update_data = driver_in.dict(exclude_unset=True)
-    for field, value in update_data.items():
-        setattr(driver, field, value)
+    
+    if "name" in update_data:
+        driver.name = update_data["name"]
+
+    if "team_id" in update_data:
+        if not (
+            db.query(models.Team)
+            .filter(models.Team.id == update_data["team_id"])
+            .first()
+        ):
+            raise HTTPException(status_code=400, detail="Team does not exist.")
+
+        if (
+            db.query(models.Driver)
+            .filter(models.Driver.team_id == update_data["team_id"])
+            .count() >= 2
+        ):
+            raise HTTPException(status_code=400, detail="Team already has 2 drivers.")
+
+        driver.team_id = update_data["team_id"]
     
     db.add(driver)
     db.commit()

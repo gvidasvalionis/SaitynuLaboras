@@ -9,6 +9,8 @@ class GrandPrix(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     name = Column(String(100), nullable=False)
     year = Column(Integer, nullable=False)
+    total_distance = Column(Integer, nullable=False)
+    total_laps = Column(Integer, nullable=False)
 
     # Relationships
     strategies = relationship("Strategy", back_populates="grand_prix", cascade="all, delete-orphan")

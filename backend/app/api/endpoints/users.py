@@ -19,21 +19,6 @@ def read_users(
     users = db.query(models.User).offset(skip).limit(limit).all()
     return users
 
-
-@router.post("/", response_model=schemas.User)
-def create_user(
-    *,
-    db: Session = Depends(get_db),
-    user_in: schemas.UserCreate,
-) -> Any:
-    """Create new user."""
-    user = models.User(**user_in.dict())
-    db.add(user)
-    db.commit()
-    db.refresh(user)
-    return user
-
-
 @router.get("/{user_id}", response_model=schemas.User)
 def read_user(
     *,

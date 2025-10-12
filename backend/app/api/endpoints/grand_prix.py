@@ -1,7 +1,7 @@
 from typing import Any, List
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from app import models, schemas
 from app.database import get_db
@@ -18,6 +18,61 @@ def read_grand_prix(
     """Retrieve grand prix."""
     grand_prix = db.query(models.GrandPrix).offset(skip).limit(limit).all()
     return grand_prix
+
+@router.get("/hierarchy", response_model=List[schemas.GrandPrixWithHierarchy])
+def get_all_grand_prix_hierarchy(
+    db: Session = Depends(get_db),
+    skip: int = 0,
+    limit: int = 100,
+) -> Any:
+    """Get all Grand Prix with full hierarchy: Teams -> Drivers -> Strategies."""
+    grand_prix_list = db.query(models.GrandPrix).offset(skip).limit(limit).all()
+    
+    result = []
+    for grand_prix in grand_prix_list:
+        # Get all teams that have strategies for this Grand Prix
+        teams_with_strategies = (
+            db.query(models.Team)
+            .join(models.Strategy, models.Team.id == models.Strategy.team_id)
+            .filter(models.Strategy.grand_prix_id == grand_prix.id)
+            .options(
+                joinedload(models.Team.drivers).joinedload(models.Driver.strategies)
+            )
+            .distinct()
+            .all()
+        )
+        
+        # Filter strategies by Grand Prix and organize the hierarchy
+        hierarchy_teams = []
+        for team in teams_with_strategies:
+            team_drivers = []
+            for driver in team.drivers:
+                # Filter strategies for this Grand Prix and driver
+                driver_strategies = [
+                    strategy for strategy in driver.strategies 
+                    if strategy.grand_prix_id == grand_prix.id
+                ]
+                
+                if driver_strategies:  # Only include drivers with strategies
+                    team_drivers.append({
+                        "id": driver.id,
+                        "name": driver.name,
+                        "strategies": driver_strategies
+                    })
+            
+            if team_drivers:  # Only include teams with drivers that have strategies
+                hierarchy_teams.append({
+                    "id": team.id,
+                    "name": team.name,
+                    "drivers": team_drivers
+                })
+        
+        result.append({
+            **grand_prix.__dict__,
+            "teams": hierarchy_teams
+        })
+    
+    return result
 
 
 @router.post("/", response_model=schemas.GrandPrix)
