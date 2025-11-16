@@ -12,7 +12,7 @@ router = APIRouter()
 
 # ===== PUBLIC ROUTES (no authentication) =====
 
-@router.get("/", response_model=list[DriverResponse], status_code=status.HTTP_200_OK)
+@router.get("/", response_model=list[Optional[DriverResponse]], status_code=status.HTTP_200_OK)
 def list_drivers(
     db: Session = Depends(get_db),
 ):
@@ -25,7 +25,7 @@ def list_drivers(
 def create_driver(
     driver: DriverCreate,
     db: Session = Depends(get_db),
-    current_admin: Driver = Depends(get_current_admin_user),
+    current_admin = Depends(get_current_admin_user),
 ):
     new_driver = Driver(
         name=driver.name,
