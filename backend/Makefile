@@ -1,16 +1,15 @@
-.PHONY: help install dev db-up db-down db-restart db-logs db-shell db-init db-reset run test clean docker-build docker-up docker-down docker-logs
+.PHONY: help install dev db-up db-down db-restart db-logs db-shell db-reset run test clean docker-build docker-up docker-down docker-logs
 
 help:
 	@echo "Available commands:"
 	@echo "  make install   - Install Python dependencies"
-	@echo "  make dev   - Setup development environment (install + db-up + db-init)"
+	@echo "  make dev   - Setup development environment (install + db-up )"
 	@echo ""
 	@echo "Database commands:"
 	@echo "  make db-up - Start MySQL database"
 	@echo "  make db-down   - Stop MySQL database"
 	@echo "  make db-restart- Restart MySQL database"
 	@echo "  make db-logs   - View database logs"
-	@echo "  make db-init   - Create database tables"
 	@echo "  make db-reset  - Reset database (WARNING: deletes all data)"
 	@echo ""
 	@echo "Application commands:"
@@ -32,8 +31,7 @@ install:
 	@echo "✅ Dependencies installed!"
 
 # Setup development environment
-dev: db-up
-	@make db-init
+dev: install db-up
 	@echo "✅ Development environment ready!"
 	@echo "Run 'make run' to start the application"
 
@@ -56,21 +54,6 @@ db-restart:
 db-logs:
 	@echo "📋 Database logs (Ctrl+C to exit):"
 	docker-compose logs -f mysql
-
-db-init:
-	@echo "🔧 Creating database tables..."
-	python -m src.scripts.db_tables_init
-	@echo "✅ Tables created!"
-
-db-reset:
-	@echo "⚠️  WARNING: This will delete all data!"
-	@read -p "Are you sure? (y/N): " confirm && [ "$$confirm" = "y" ] || exit 1
-	@echo "🗑️  Resetting database..."
-	docker-compose down -v
-	@make db-up
-	@sleep 5
-	@make db-init
-	@echo "✅ Database reset complete!"
 
 # Run application
 run:
@@ -119,3 +102,21 @@ clean-all:
 	docker-compose down -v --rmi local
 	@make clean
 	@echo "✅ Everything destroyed!"
+
+# Create a new migration (autogenerate from model changes)
+# Usage: make migrate-create MSG="add user email verification"
+# Then: make migrate-up
+migrate-create:
+	alembic revision --autogenerate -m "$(MSG)"
+
+# Apply all pending migrations
+migrate-up:
+	alembic upgrade head
+
+# Show migration history
+migrate-history:
+	alembic history
+
+# Show current migration version
+migrate-current:
+	alembic current

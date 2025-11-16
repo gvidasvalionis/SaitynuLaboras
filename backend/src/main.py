@@ -1,5 +1,6 @@
-from fastapi import FastAPI
 import uvicorn
+from typing import Annotated
+from fastapi import FastAPI
 
 from src.api import api_router
 
