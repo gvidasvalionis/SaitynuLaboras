@@ -58,9 +58,9 @@ db-logs:
 # Run application
 run:
 	@echo "🚀 Starting FastAPI application..."
-	@echo "📍 API: http://localhost:8000"
-	@echo "📚 Docs: http://localhost:8000/docs"
-	uvicorn src.main:app --reload
+	@echo "📍 API: http://localhost:80"
+	@echo "📚 Docs: http://localhost:80/docs"
+	uvicorn src.main:app --host 0.0.0.0 --port 80 --reload
 
 # Docker full stack
 docker-build:
