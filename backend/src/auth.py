@@ -2,6 +2,7 @@ from datetime import datetime, timedelta, timezone
 import os
 import secrets
 from typing import Optional
+from dotenv import load_dotenv
 
 from jose import JWTError, jwt
 from fastapi import Depends, HTTPException, status
@@ -11,6 +12,8 @@ from sqlalchemy.orm import Session
 from src.database import get_db
 from src.db_models import User, RefreshToken
 from src.security import verify_password
+
+load_dotenv()
 
 ALGORITHM = "HS256"
 SECRET_KEY = os.getenv("SECRET_KEY")
