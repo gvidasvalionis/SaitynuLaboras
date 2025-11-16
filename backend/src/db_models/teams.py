@@ -10,3 +10,4 @@ class Team(Base):
     name = Column(String(100), unique=True, index=True, nullable=False)
 
     drivers = relationship("Driver", back_populates="team")
+    strategies = relationship("Strategy", back_populates="team", cascade="all, delete-orphan")

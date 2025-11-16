@@ -8,12 +8,6 @@ class StrategyBase(BaseModel):
     name: str
     description: str = Field(default="", max_length=500)
     parameters: dict = Field(..., description="Strategy parameters in JSON format")
-
-    @field_validator('parameters')
-    def validate_parameters(cls, v):
-        if not v or not v.strip():
-            raise ValueError('Parameters cannot be empty')
-        return v.strip()
     
     @field_validator('parameters')
     @classmethod
