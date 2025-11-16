@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from src.db_models import User
 from src.schemas.user import UserCreate, UserResponse, PasswordChange
 from src.database import get_db
-from src.security import hash_password, verify_password
+from src.security import hash_password, verify_password, revoke_all_refresh_tokens
 from src.auth import get_current_admin_user, get_current_user
 
 router = APIRouter()
@@ -56,6 +56,8 @@ def change_password(
     current_user.hashed_password = hashed_pw
     
     db.commit()
+
+    revoke_all_refresh_tokens(db, current_user.id)
     return {"detail": "Password updated successfully"}
 
 @router.delete("/me", status_code=status.HTTP_204_NO_CONTENT)

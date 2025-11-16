@@ -20,6 +20,28 @@ def list_strategies(
     strategies = db.query(Strategy).all()
     return strategies
 
+@router.get("/by-user", response_model=list[StrategyResponse], status_code=status.HTTP_200_OK)
+def list_user_strategies(
+    grand_prix_id: int,
+    driver_id: int,
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user),
+):
+    if current_user.id != user_id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not permitted")
+    
+    strategies = (
+        db.query(Strategy)
+        .filter(
+            Strategy.user_id == user_id,
+            Strategy.grand_prix_id == grand_prix_id,
+            Strategy.driver_id == driver_id,
+        )
+        .all()
+    )
+    return strategies
+
 @router.post("/me", response_model=StrategyResponse, status_code=status.HTTP_201_CREATED)
 def create_strategy(
     strategy: StrategyCreate,
