@@ -19,3 +19,4 @@ class User(Base):
     role = Column(String(50), default=UserRole.user.value, nullable=False)
 
     refresh_tokens = relationship("RefreshToken", back_populates="user", cascade="all, delete-orphan")
+    strategies = relationship("Strategy", back_populates="user", cascade="all, delete-orphan")
