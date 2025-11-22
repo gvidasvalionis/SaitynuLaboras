@@ -206,3 +206,22 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+// ...existing code...
+
+# Frontend React/Vite
+frontend/f1/node_modules/
+frontend/f1/dist/
+frontend/f1/build/
+frontend/f1/.env
+frontend/f1/.env.local
+frontend/f1/.env.*.local
+frontend/f1/.DS_Store
+frontend/f1/Thumbs.db
+frontend/f1/npm-debug.log*
+frontend/f1/yarn-debug.log*
+frontend/f1/yarn-error.log*
+frontend/f1/pnpm-debug.log*
+frontend/f1/coverage/
+frontend/f1/.cache/
+frontend/f1/.temp/
