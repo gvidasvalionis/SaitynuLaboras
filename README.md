@@ -39,8 +39,6 @@ Administratorius prižiūrės turinį – patvirtins viešam rodymui pateiktas s
    - Suplanuoti strategijos detales
 4. Pateikti strategiją viešam skelbimui.
 5. Peržiūrėti kitų naudotojų paviešintas strategijas.
-6. Komentuoti ir vertinti (reitinguoti) kitų naudotojų sukurtas strategijas.
-7. Peržiūrėti strategijos autoriaus profilį (jo kitas sukurtas strategijas).
 
 **Administratorius galės:**
 
