@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import type { User } from '../types';
 
 interface FooterProps {
