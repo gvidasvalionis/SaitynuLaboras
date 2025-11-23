@@ -45,7 +45,14 @@ def create_refresh_token(db: Session, user_id: int) -> str:
 def verify_refresh_token(db: Session, token: str) -> Optional[User]:
     db_token = db.query(RefreshToken).filter(RefreshToken.token == token, RefreshToken.revoked == False).first()
 
-    if not db_token or db_token.expires_at < datetime.now(timezone.utc):
+    if not db_token:
+        return None
+    
+    token_expires = db_token.expires_at
+    if token_expires.tzinfo is None:
+        token_expires = token_expires.replace(tzinfo=timezone.utc)
+
+    if token_expires < datetime.now(timezone.utc):
         return None
 
     return db_token.user
