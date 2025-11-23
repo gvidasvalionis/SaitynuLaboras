@@ -117,6 +117,11 @@ export const authService = {
 
 // Strategy Services
 export const strategyService = {
+    async getAllPublic(): Promise<Strategy[]> {
+        const response = await api.get<Strategy[]>('/strategies/public');
+        return response.data;
+    },
+
     async getAll(): Promise<Strategy[]> {
         const response = await api.get<Strategy[]>('/strategies/');
         return response.data;

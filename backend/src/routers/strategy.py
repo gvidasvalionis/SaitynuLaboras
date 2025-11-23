@@ -10,6 +10,19 @@ from src.auth import get_current_user, get_current_admin_user
 
 router = APIRouter()
 
+@router.get("/public", response_model=list[StrategyResponse], status_code=status.HTTP_200_OK)
+def list_approved_strategies(
+    db: Session = Depends(get_db),
+):
+    strategies = (
+        db.query(Strategy)
+        .filter(
+            Strategy.approved == True,
+        )
+        .all()
+    )
+    return strategies
+
 # ===== AUTHENTICATED USER ROUTES =====
 
 @router.get("/by-user-all", response_model=list[Optional[StrategyResponse]], status_code=status.HTTP_200_OK)

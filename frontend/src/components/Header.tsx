@@ -28,6 +28,7 @@ export default function Header({ user, onLogout }: HeaderProps) {
         <nav className="nav">
           <ul className="nav__list">
             <li><Link to="/" className="nav__link">HOME</Link></li>
+            <li><Link to="/browse" className="nav__link">BROWSE</Link></li>
             
             {/* Show STRATEGIES only for logged-in users */}
             {user && (
@@ -93,6 +94,11 @@ export default function Header({ user, onLogout }: HeaderProps) {
           <li>
             <Link to="/" className="mobile-nav__link" onClick={() => setMobileMenuOpen(false)}>
               HOME
+            </Link>
+          </li>
+          <li>
+            <Link to="/browse" className="mobile-nav__link" onClick={() => setMobileMenuOpen(false)}>
+              BROWSE
             </Link>
           </li>
 

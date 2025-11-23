@@ -9,6 +9,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Strategies from './pages/Strategies';
+import PublicStrategies from './pages/PublicStrategies';
 import StrategyDetails from './pages/StrategyDetails';
 import CreateStrategy from './pages/CreateStrategy';
 import EditStrategy from './pages/EditStrategy';
@@ -68,6 +69,7 @@ function App() {
         <Route path="/strategies/:id/edit" element={<EditStrategy user={user} />} />
         <Route path="/create" element={<CreateStrategy user={user} />} />
         <Route path="/admin" element={<AdminPanel user={user} />} />
+        <Route path="/browse" element={<PublicStrategies user={user} />} />
       </Routes>
       <Footer user={user} />
     </BrowserRouter>
