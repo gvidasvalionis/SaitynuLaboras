@@ -19,6 +19,16 @@ def list_drivers(
     drivers = db.query(Driver).all()
     return drivers
 
+@router.get("/{driver_id}", response_model=DriverResponse, status_code=status.HTTP_200_OK)
+def get_driver(
+    driver_id: int,
+    db: Session = Depends(get_db),
+):
+    driver = db.query(Driver).filter(Driver.id == driver_id).first()
+    if not driver:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Driver not found")
+    return driver
+
 # ===== ADMIN ROUTES =====
 
 @router.post("/", response_model=DriverResponse, status_code=status.HTTP_201_CREATED)

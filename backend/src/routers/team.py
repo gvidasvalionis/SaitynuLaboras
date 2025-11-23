@@ -20,6 +20,16 @@ def get_teams(
     teams = db.query(Team).all()
     return teams
 
+@router.get("/{team_id}", response_model=TeamResponse, status_code=status.HTTP_200_OK)
+def get_team(
+    team_id: int,
+    db: Session = Depends(get_db),
+):
+    db_team = db.query(Team).filter(Team.id == team_id).first()
+    if not db_team:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Team not found")
+    return db_team
+
 # ===== ADMIN ROUTES (admin authentication required) =====
 
 @router.post("/", response_model=TeamResponse, status_code=status.HTTP_201_CREATED)

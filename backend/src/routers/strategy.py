@@ -12,12 +12,12 @@ router = APIRouter()
 
 # ===== AUTHENTICATED USER ROUTES =====
 
-@router.get("/", response_model=list[Optional[StrategyResponse]], status_code=status.HTTP_200_OK)
+@router.get("/by-user-all", response_model=list[Optional[StrategyResponse]], status_code=status.HTTP_200_OK)
 def list_strategies(
     db: Session = Depends(get_db),
     current_user = Depends(get_current_user)
 ):
-    strategies = db.query(Strategy).all()
+    strategies = db.query(Strategy).filter(Strategy.user_id == current_user.id).all()
     return strategies
 
 @router.get("/by-user", response_model=list[StrategyResponse], status_code=status.HTTP_200_OK)
@@ -56,11 +56,31 @@ def create_strategy(
         grand_prix_id=strategy.grand_prix_id,
         driver_id=strategy.driver_id,
         user_id=current_user.id,
+        team_id=strategy.team_id,
     )
     db.add(new_strategy)
     db.commit()
     db.refresh(new_strategy)
     return new_strategy
+
+@router.get("/me/{strategy_id}", response_model=StrategyResponse, status_code=status.HTTP_200_OK)
+def get_user_strategy(
+    strategy_id: int,
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user),
+):
+    strategy = db.query(Strategy).filter(
+        Strategy.id == strategy_id, 
+        Strategy.user_id == current_user.id
+    ).first()
+    
+    if not strategy:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, 
+            detail="Strategy not found or you don't have permission to view it"
+        )
+    
+    return strategy
 
 @router.put("/me/{strategy_id}", response_model=StrategyResponse, status_code=status.HTTP_200_OK)
 def update_strategy(
@@ -84,7 +104,29 @@ def update_strategy(
     db.refresh(strategy)
     return strategy
 
+@router.delete("/me/{strategy_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_strategy(
+    strategy_id: int,
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user),
+):
+    strategy = db.query(Strategy).filter(Strategy.id == strategy_id, Strategy.user_id == current_user.id).first()
+    if not strategy:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Strategy not found")
+    
+    db.delete(strategy)
+    db.commit()
+    return None
+
 # ===== ADMIN ROUTES =====
+
+@router.get("/", response_model=list[Optional[StrategyResponse]], status_code=status.HTTP_200_OK)
+def list_strategies(
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_admin_user)
+):
+    strategies = db.query(Strategy).all()
+    return strategies
 
 @router.put("/{strategy_id}/approve", response_model=StrategyResponse, status_code=status.HTTP_200_OK)
 def approve_strategy(

@@ -87,9 +87,9 @@ class StrategyBase(BaseModel):
 class StrategyCreate(StrategyBase):
     grand_prix_id: int
     driver_id: int
-    user_id: int
+    team_id: int
 
-    @field_validator('grand_prix_id', 'driver_id', 'user_id')
+    @field_validator('grand_prix_id', 'driver_id', 'team_id')
     @classmethod
     def id_must_be_positive(cls, v):
         if v <= 0:
@@ -102,6 +102,7 @@ class StrategyResponse(StrategyBase):
     grand_prix_id: int
     driver_id: int
     user_id: int
+    team_id: int
     model_config = ConfigDict(from_attributes=True)
 
 class StrategyUpdate(BaseModel):

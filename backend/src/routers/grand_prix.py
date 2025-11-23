@@ -19,6 +19,19 @@ def get_all_grand_prix(
     grand_prix_list = db.query(GrandPrix).all()
     return grand_prix_list
 
+@router.get("/{grand_prix_id}", response_model=GrandPrixResponse, status_code=status.HTTP_200_OK)
+def get_grand_prix(
+    grand_prix_id: int,
+    db: Session = Depends(get_db),
+):
+    grand_prix = db.query(GrandPrix).filter(GrandPrix.id == grand_prix_id).first()
+    if not grand_prix:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Grand Prix not found.",
+        )
+    return grand_prix
+
 # ===== ADMIN ROUTES =====
 
 @router.post("/", response_model=GrandPrixResponse, status_code=status.HTTP_201_CREATED)
