@@ -68,10 +68,10 @@ Internetinė aplikacija yra pasiekiama per HTTP protokolą. Sistemos aplikacijų
 │         Kliento naršyklė                │
 │         (Web Browser)                   │
 │                                         │
-│  ┌───────────────────────────────────┐ │
-│  │    React.js + TypeScript          │ │
-│  │    (Frontend Application)         │ │
-│  └───────────────────────────────────┘ │
+│  ┌───────────────────────────────────┐  │
+│  │    React.js + TypeScript          │  │
+│  │    (Frontend Application)         │  │
+│  └───────────────────────────────────┘  │
 └─────────────────────────────────────────┘
                   │
                   │ HTTPS
@@ -79,26 +79,26 @@ Internetinė aplikacija yra pasiekiama per HTTP protokolą. Sistemos aplikacijų
 ┌─────────────────────────────────────────┐
 │      Azure VM                           │
 │                                         │
-│  ┌───────────────────────────────────┐ │
-│  │    FastAPI Application            │ │
-│  │    (Python Backend)               │ │
-│  │                                   │ │
-│  │  - Authentication                 │ │
-│  │  - Business Logic                 │ │
-│  │  - API Endpoints                  │ │
-│  └───────────────────────────────────┘ │
+│  ┌───────────────────────────────────┐  │
+│  │    FastAPI Application            │  │
+│  │    (Python Backend)               │  │
+│  │                                   │  │
+│  │  - Authentication                 │  │
+│  │  - Business Logic                 │  │
+│  │  - API Endpoints                  │  │
+│  └───────────────────────────────────┘  │
 │                  │                      │
 │                  │ SQLAlchemy ORM       │
 │                  ↓                      │
-│  ┌───────────────────────────────────┐ │
-│  │    MySQL Database                 │ │
-│  │                                   │ │
-│  │  - Users                          │ │
-│  │  - Teams                          │ │
-│  │  - Drivers                        │ │
-│  │  - Grand Prix                     │ │
-│  │  - Strategies                     │ │
-│  └───────────────────────────────────┘ │
+│  ┌───────────────────────────────────┐  │
+│  │    MySQL Database                 │  │
+│  │                                   │  │
+│  │  - Users                          │  │
+│  │  - Teams                          │  │
+│  │  - Drivers                        │  │
+│  │  - Grand Prix                     │  │
+│  │  - Strategies                     │  │
+│  └───────────────────────────────────┘  │
 └─────────────────────────────────────────┘
 ```
 
