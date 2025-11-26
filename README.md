@@ -63,21 +63,22 @@ Internetinė aplikacija yra pasiekiama per HTTP protokolą. Sistemos aplikacijų
 
 ### 2.1 UML Deployment Diagrama
 
-┌────────────────────────────────────────┐
-│         Kliento naršyklė               │
-│         (Web Browser)                  │
-│                                        │
+```
+┌─────────────────────────────────────────┐
+│         Kliento naršyklė                │
+│         (Web Browser)                   │
+│                                         │
 │  ┌───────────────────────────────────┐ │
 │  │    React.js + TypeScript          │ │
 │  │    (Frontend Application)         │ │
 │  └───────────────────────────────────┘ │
-└────────────────────────────────────────┘
+└─────────────────────────────────────────┘
                   │
                   │ HTTPS
                   ↓
-┌────────────────────────────────────────┐
-│      Azure VM                          │
-│                                        │
+┌─────────────────────────────────────────┐
+│      Azure VM                           │
+│                                         │
 │  ┌───────────────────────────────────┐ │
 │  │    FastAPI Application            │ │
 │  │    (Python Backend)               │ │
@@ -86,9 +87,9 @@ Internetinė aplikacija yra pasiekiama per HTTP protokolą. Sistemos aplikacijų
 │  │  - Business Logic                 │ │
 │  │  - API Endpoints                  │ │
 │  └───────────────────────────────────┘ │
-│                  │                     │
-│                  │ SQLAlchemy ORM      │
-│                  ↓                     │
+│                  │                      │
+│                  │ SQLAlchemy ORM       │
+│                  ↓                      │
 │  ┌───────────────────────────────────┐ │
 │  │    MySQL Database                 │ │
 │  │                                   │ │
@@ -98,7 +99,17 @@ Internetinė aplikacija yra pasiekiama per HTTP protokolą. Sistemos aplikacijų
 │  │  - Grand Prix                     │ │
 │  │  - Strategies                     │ │
 │  └───────────────────────────────────┘ │
-└────────────────────────────────────────┘
+└─────────────────────────────────────────┘
+```
+
+### 2.2 Duomenų bazės schema
+
+Pagrindinės lentelės:
+- **users** - vartotojų informacija (id, username, email, password_hash, role, created_at)
+- **teams** - F1 komandų informacija (id, name, country)
+- **drivers** - lenktynininkų informacija (id, name, number, team_id)
+- **grand_prix** - Grand Prix renginių informacija (id, name, location, date, year)
+- **strategies** - strategijų informacija (id, name, description, parameters, approved, grand_prix_id, team_id, driver_id, user_id, created_at, updated_at)
 
 ## 4. API Specifikacija
 
